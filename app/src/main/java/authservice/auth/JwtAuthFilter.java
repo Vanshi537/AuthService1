@@ -36,7 +36,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String username=null;
         if(authHeader !=null && authHeader.startsWith("Bearer " )){
             token= authHeader.substring(7);
-            username= jwtService.extractUsername(token);
+            try {
+                username= jwtService.extractUsername(token);
+            }catch(Exception e){
+                // do nothing here — username stays null
+            }
         }
 
         if(username != null && SecurityContextHolder.getContext().getAuthentication()== null){
@@ -50,3 +54,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 }
+//    @Override
+//    protected boolean shouldNotFilter(HttpServletRequest request) {
+//        String path = request.getServletPath();
+//        return path.startsWith("/auth/v1/");
+//    }

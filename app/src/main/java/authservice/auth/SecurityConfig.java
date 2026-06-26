@@ -32,11 +32,11 @@ public class SecurityConfig {
     @Autowired
     private final UserDetailsServiceImpl userDetailsServiceImpl;
 
-    @Bean
-    @Autowired
-    public UserDetailsService userDetailsService(UserRepository userRepository, PasswordEncoder passwordEncoder){
-        return new UserDetailsServiceImpl(userRepository, passwordEncoder);
-    }
+//    @Bean
+//    @Autowired
+//    public UserDetailsService userDetailsService(UserRepository userRepository, PasswordEncoder passwordEncoder){
+//        return new UserDetailsServiceImpl(userRepository, passwordEncoder);
+//    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthFilter jwtAuthFilter)throws Exception{
@@ -44,7 +44,8 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer:: disable).cors(CorsConfigurer:: disable)
                 .authorizeHttpRequests(auth-> auth
-                        .requestMatchers("/auth/v1/login", "/auth/v1/refreshToken", "/auth/v1/signup", "/error").permitAll()
+//                        .requestMatchers("/auth/v1/login", "/auth/v1/refreshToken", "/auth/v1/signup", "/error").permitAll()
+                        .requestMatchers("/auth/v1/**", "/error", "/error/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement((sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS)))
